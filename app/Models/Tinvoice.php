@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tinvoice extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'BranchName'
+    ];
 }

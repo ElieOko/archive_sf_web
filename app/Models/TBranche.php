@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TBranche extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'BranchName'
+    ];
 }

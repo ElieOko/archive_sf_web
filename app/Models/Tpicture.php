@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Tpicture extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'BranchName'
+    ];
 }

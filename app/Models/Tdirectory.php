@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Tdirectory extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'DirectoryName',
+        'parentId'
+    ];
 }
