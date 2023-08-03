@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("InvoiceDesc")->nullable();
             $table->string("InvoiceBarCode")->nullable();
             $table->unsignedBigInteger('UserFId');
-            $table->foreign('UserFId')->references('UserId')->on('users');
+            $table->foreign('UserFId')->references('id')->on('users');
             $table->unsignedBigInteger('DirectoryFId');
             $table->foreign('DirectoryFId')->references('DirectoryId')->on('tdirectories');
             $table->unsignedBigInteger('BranchFId');

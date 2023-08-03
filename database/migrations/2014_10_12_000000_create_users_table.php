@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id("UserId");
-            $table->string('username');
+            $table->id();
+            $table->string('username')->default("Soficom_it");
             $table->string('password');
             $table->string('serialNumber')->nullable();
             $table->string('smstoken')->nullable();
             $table->string('phone')->nullable();
+            $table->string('email')->unique();
             // $table->unsignedBigInteger('BranchFId');
             // $table->foreign('BranchFId')->references('BrachId')->on('t_branches');
             $table->timestamp('email_verified_at')->nullable();
