@@ -15,7 +15,7 @@ class UserController extends Controller
         # code...
         $fields = $request->validate([
             'username' => 'required|string',
-            'password'=>'required|string'
+            'password'=>'required|string',
         ]);
         $user = User::where('username',$fields['username'])->first();
         if(!$user || !Hash::check($fields['password'], $user->password)){
@@ -38,11 +38,13 @@ class UserController extends Controller
         # code...
         $fields = $request->validate([
             'username' => 'required|string|unique:users,username',
-            'password'=>'required|string|confirmed'
+            'password'=>'required|string|confirmed',
+            'email' =>'required|string',
         ]);
         $user = User::create([
             'username' => $fields['username'],
-            'password' => bcrypt($fields['password'])
+            'password' => bcrypt($fields['password']),
+            'email' => $fields['email']
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
         $response = [
