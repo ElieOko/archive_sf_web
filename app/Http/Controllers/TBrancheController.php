@@ -18,9 +18,15 @@ class TBrancheController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+                # code...
+        $fields = $request->validate([ 'BranchName' => 'required|string|unique:users,BranchName']);
+        $branche = TBranche::create(['BranchName' => $fields['BranchName']]);
+        $response = ['message' => "Save",];  
+        return response($response,201);
+
     }
 
     /**
