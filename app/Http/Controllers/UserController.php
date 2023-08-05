@@ -26,10 +26,7 @@ class UserController extends Controller
             );
         }
        // $token = $user->createToken('myapptoken')->plainTextToken;
-        $response = [
-            'user' => $user,
-            //'token' => $token
-        ];  
+        $response = $user;  
         return response($response,201);
     }
 
@@ -40,11 +37,13 @@ class UserController extends Controller
             'username' => 'required|string|unique:users,username',
             'password'=>'required|string|confirmed',
             'email' =>'required|string',
+            'BranchFId'=>'required|int',
         ]);
         $user = User::create([
             'username' => $fields['username'],
             'password' => bcrypt($fields['password']),
-            'email' => $fields['email']
+            'email' => $fields['email'],
+            'BranchFId' => $fields['BranchFId']
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
         $response = [

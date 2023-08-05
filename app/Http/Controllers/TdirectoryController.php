@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tdirectory;
+use App\Models\Tinvoicekey;
 use Illuminate\Http\Request;
 
 class TdirectoryController extends Controller
@@ -14,13 +15,27 @@ class TdirectoryController extends Controller
     {
         //
     }
+    public function getAllDirectoryAndInvoicekey(){
+        $invoicekey = Tinvoicekey::all();
+        $directory = Tdirectory::all(); 
+        $response = [
+            "data" =>[
+                'directory' => $directory,
+                'invoicekey' => $invoicekey
+            ]
+        ];  
+        return response($response,201);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function getAllDirectory()
     {
         //
+        $directory = Tdirectory::all();
+        $response = $directory;  
+        return response($response,201);
     }
 
     /**
@@ -30,7 +45,7 @@ class TdirectoryController extends Controller
     {
         //
         $fields = $request->validate([ 'DirectoryName' => 'required|string|unique:tdirectories,DirectoryName','parentId' => 'string']);
-        $branche = Tdirectory::create(['DirectoryName' => $fields['DirectoryName'],'parentId'=>$fields['parentId']]);
+        $branche = Tdirectory::create(['DirectoryName' => $fields['DirectoryName'],'parentId'=> $fields['parentId']]);
         $response = ['message' => "Save",];  
         return response($response,201);
 

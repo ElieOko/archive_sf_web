@@ -18,9 +18,13 @@ class TinvoicekeyController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function getAllInvoiceKey()
     {
         //
+        $invoicekey = Tinvoicekey::all();
+        $response = $invoicekey;
+     
+        return response($response,201);
     }
 
     /**
@@ -29,6 +33,10 @@ class TinvoicekeyController extends Controller
     public function store(Request $request)
     {
         //
+        $fields = $request->validate([ 'Invoicekey' => 'required|string|unique:tinvoicekeys,Invoicekey','DirectoryFId'=>'required|int']);
+        $branche = Tinvoicekey::create(['Invoicekey' => $fields['Invoicekey'],'DirectoryFId'=>$fields['DirectoryFId']]);
+        $response = ['message' => "Save",];  
+        return response($response,201);
     }
 
     /**

@@ -22,7 +22,7 @@ class TBrancheController extends Controller
     {
         //
                 # code...
-        $fields = $request->validate([ 'BranchName' => 'required|string|unique:users,BranchName']);
+        $fields = $request->validate([ 'BranchName' => 'required|string|unique:t_branches,BranchName']);
         $branche = TBranche::create(['BranchName' => $fields['BranchName']]);
         $response = ['message' => "Save",];  
         return response($response,201);
@@ -32,9 +32,14 @@ class TBrancheController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function getAllBranch()
     {
-        //
+                //
+                $branche = TBranche::all();
+                $response = [
+                    'branch' => $branche,
+                ];  
+                return response($response,201);
     }
 
     /**
