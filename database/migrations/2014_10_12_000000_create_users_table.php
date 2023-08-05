@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('smstoken')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
-            // $table->unsignedBigInteger('BranchFId');
+            $table->integer('BranchFId');
             // $table->foreign('BranchFId')->references('BrachId')->on('t_branches');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

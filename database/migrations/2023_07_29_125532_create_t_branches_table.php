@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('t_branches', function (Blueprint $table) {
             $table->id('BranchId');
             $table->string("BranchName");
+            $table->timestamps();
         });
     }
 

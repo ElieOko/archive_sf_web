@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("DirectoryName");
             $table->string("parentId")->nullable();
             $table->boolean("available")->default(true);
+            $table->timestamps();
         });
     }
 
