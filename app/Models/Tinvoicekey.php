@@ -9,6 +9,7 @@ class Tinvoicekey extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'BranchName'
+        'Invoicekey',
+        'DirectoryFId',
     ];
 }
