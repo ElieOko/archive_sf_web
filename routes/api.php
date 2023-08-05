@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TBrancheController;
 use App\Http\Controllers\TdirectoryController;
+use App\Http\Controllers\TinvoicekeyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,11 @@ Route::post('/register',[UserController::class,'register']);
 Route::post('/login',[UserController::class,'login']);
 Route::post('/branch',[TBrancheController::class,'create']);
 Route::post('/directory',[TdirectoryController::class,'store']);
+Route::get('/alldirectory',[TdirectoryController::class,'getAllDirectory']);
+Route::post('/invoicekey',[TinvoicekeyController::class,'store']);
+Route::get('/allinvoicekey',[TinvoicekeyController::class,'getAllInvoiceKey']);
+//
+Route::get('/alldirectoryinvoice',[TdirectoryController::class,'getAllDirectoryAndInvoicekey']);
 Route::group(['middleware'=>['auth:sanctum']], function () {
    //
    
