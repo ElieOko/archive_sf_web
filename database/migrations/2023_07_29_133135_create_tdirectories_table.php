@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tdirectories', function (Blueprint $table) {
+        Schema::create('TDirectories', function (Blueprint $table) {
             $table->id("DirectoryId");
             $table->string("DirectoryName");
             $table->string("parentId")->nullable();

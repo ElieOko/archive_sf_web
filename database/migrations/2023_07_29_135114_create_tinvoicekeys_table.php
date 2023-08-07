@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tinvoicekeys', function (Blueprint $table) {
+        Schema::create('TInvoiceKeys', function (Blueprint $table) {
             $table->id("InvoicekeyId");
             $table->string("Invoicekey");
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('tdirectories');
+            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
             $table->timestamps();
         });
     }

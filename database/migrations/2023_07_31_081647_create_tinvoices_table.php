@@ -11,21 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tinvoices', function (Blueprint $table) {
+        Schema::create('TInvoices', function (Blueprint $table) {
             $table->id("InvoiceId");
             $table->string("InvoiceCode")->nullable();
             $table->string("InvoiceDesc")->nullable();
             $table->string("InvoiceBarCode")->nullable();
             $table->unsignedBigInteger('UserFId');
-            $table->foreign('UserFId')->references('id')->on('users');
+            $table->foreign('UserFId')->references('UserId')->on('TUsers');
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('tdirectories');
+            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
             $table->unsignedBigInteger('BranchFId');
-            $table->foreign('BranchFId')->references('BranchId')->on('t_branches');
+            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
             $table->timestamps();
             $table->date("InvoiceDate");
-            $table->unsignedBigInteger('InvoicekeyFId');
-            $table->foreign('InvoicekeyFId')->references('InvoicekeyId')->on('tinvoicekeys');
+            $table->unsignedBigInteger('InvoiceKeyFId');
+            $table->foreign('InvoicekeyFId')->references('InvoiceKeyId')->on('TInvoiceKeys');
             $table->string("InvoicePath")->nullable();
             $table->string("AndroidVersion")->nullable();
             $table->string("InvoiceUniqueId")->nullable();

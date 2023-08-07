@@ -8,8 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Tdirectory extends Model
 {
     use HasFactory;
+    
+    protected $primaryKey = "DirectoryId";
+
     protected $fillable = [
         'DirectoryName',
         'parentId'
     ];
+
+    public $timestamps = false;
 }

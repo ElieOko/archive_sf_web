@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tpictures', function (Blueprint $table) {
+        Schema::create('TPictures', function (Blueprint $table) {
             $table->id("PictureId");
             $table->unsignedBigInteger('InvoiceFId');
-            $table->foreign('InvoiceFId')->references('InvoiceId')->on('tinvoices');
+            $table->foreign('InvoiceFId')->references('InvoiceId')->on('TInvoices');
             $table->string("PictureName");
             $table->string("PicturePath");
             $table->string("PublicUrl");

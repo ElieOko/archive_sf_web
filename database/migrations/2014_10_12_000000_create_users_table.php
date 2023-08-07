@@ -11,16 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
+        Schema::create('TUsers', function (Blueprint $table) {
+            $table->id("UserId");
             $table->string('username')->default("Soficom_it");
             $table->string('password');
             $table->string('serialNumber')->nullable();
             $table->string('smstoken')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->unique();
-            $table->integer('BranchFId');
-            // $table->foreign('BranchFId')->references('BrachId')->on('t_branches');
+        
+            $table->unsignedBigInteger('BranchFId');
+            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
+            // $table->foreign('BranchFId')->references('BranchId')->on('t_branches');
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

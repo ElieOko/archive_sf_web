@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tusersdirectories', function (Blueprint $table) {
+        Schema::create('TUsersDirectories', function (Blueprint $table) {
             $table->id("UserDirectoryId");
             $table->unsignedBigInteger('UserFId');
-            $table->foreign('UserFId')->references('id')->on('users');
+            $table->foreign('UserFId')->references('UserId')->on('TUsers');
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('tdirectories');
+            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
         });
     }
 
