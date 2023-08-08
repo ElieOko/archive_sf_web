@@ -44,7 +44,7 @@ class TdirectoryController extends Controller
     public function store(Request $request)
     {
         //
-        $fields = $request->validate([ 'DirectoryName' => 'required|string|unique:tdirectories,DirectoryName','parentId' => 'string']);
+        $fields = $request->validate([ 'DirectoryName' => 'required|string|unique:tdirectories,DirectoryName','parentId'=>'nullable|integer']);
         $branche = Tdirectory::create(['DirectoryName' => $fields['DirectoryName'],'parentId'=> $fields['parentId']]);
         $response = ['message' => "Save",];  
         return response($response,201);
