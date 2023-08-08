@@ -23,6 +23,7 @@ class UserController extends Controller
                 [
                     "message"=>"Error"
                 ],401
+                
             );
         }
        // $token = $user->createToken('myapptoken')->plainTextToken;
@@ -34,7 +35,7 @@ class UserController extends Controller
     {
         # code...
         $fields = $request->validate([
-            'username' => 'required|string|unique:users,username',
+            'username' => 'required|string|unique:TUsers,username',
             'password'=>'required|string|confirmed',
             'email' =>'required|string',
             'BranchFId'=>'required|int',

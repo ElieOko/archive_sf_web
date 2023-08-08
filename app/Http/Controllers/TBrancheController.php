@@ -22,7 +22,7 @@ class TBrancheController extends Controller
     {
         //
                 # code...
-        $fields = $request->validate([ 'BranchName' => 'required|string|unique:t_branches,BranchName']);
+        $fields = $request->validate([ 'BranchName' => 'required|string|unique:TBranches,BranchName']);
         $branche = TBranche::create(['BranchName' => $fields['BranchName']]);
         $response = ['message' => "Save",];  
         return response($response,201);
