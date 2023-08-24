@@ -15,7 +15,11 @@ class TpictureController extends Controller
      */
     public function index()
     {
-        //
+        /*
+        
+        GOOGLE_CLOUD_ACCESS_KEY_ID = infinite-strata-226508
+        
+        */
     }
     /**
      * Show the form for creating a new resource.

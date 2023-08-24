@@ -55,6 +55,13 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
+        'gcs'=>[
+            'driver' => 'gcs',
+            'key' => env('GOOGLE_CLOUD_ACCESS_KEY_ID'),
+            'secret' => env('GOOGLE_CLOUD_SECRET_ACCESS_KEY'),
+            'region' => env('GOOGLE_CLOUD_DEFAULT_REGION'),
+            'bucket' => env('GOOGLE_CLOUD_BUCKET')
+        ],
 
     ],
 
