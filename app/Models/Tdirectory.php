@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Tinvoice;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tdirectory extends Model
 {
@@ -17,4 +18,9 @@ class Tdirectory extends Model
     ];
 
     public $timestamps = false;
+    
+    public function tinvoice(): HasMany
+    {
+        return $this->hasMany(Tinvoice::class);
+    }
 }

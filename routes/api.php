@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TBrancheController;
+use App\Http\Controllers\TinvoiceController;
+use App\Http\Controllers\TpictureController;
 use App\Http\Controllers\TdirectoryController;
 use App\Http\Controllers\TinvoicekeyController;
 
@@ -25,9 +27,18 @@ Route::post('/directory',[TdirectoryController::class,'store']);
 Route::get('/alldirectory',[TdirectoryController::class,'getAllDirectory']);
 Route::post('/invoicekey',[TinvoicekeyController::class,'store']);
 Route::get('/allinvoicekey',[TinvoicekeyController::class,'getAllInvoiceKey']);
+Route::post('/invoice',[TinvoiceController::class,'store']);
+Route::get('/allinvoice',[TinvoiceController::class,'getAllInvoice']);
+Route::delete('/invoice/{id}',[TinvoiceController::class,'destroy']);
+Route::get('/invoiceshow/{id}',[TinvoiceController::class,'show']);
+Route::put('/invoicesput/{id}',[TinvoiceController::class,'edit']);
+Route::get('/alluser',[UserController::class,'getAllUser']);
+Route::post('/picture',[TpictureController::class,'store']);
+Route::get('/getAllPicture',[TpictureController::class,'getAllPicture']);
+Route::get('/picturebyinvoice/{id}',[TpictureController::class,'getAllPictureByInvoice']);
+Route::get('/test',[TpictureController::class,'test']);
 //
 Route::get('/alldirectoryinvoice',[TdirectoryController::class,'getAllDirectoryAndInvoicekey']);
 Route::group(['middleware'=>['auth:sanctum']], function () {
    //
-   
 });

@@ -4,10 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\TBranche;
+use App\Models\Tinvoice;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
@@ -52,8 +53,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-     public function tbranche()
+     public function branch()
     {
-        return $this->belongsTo(TBranche::class);
+        return $this->belongsTo(TBranche::class,'BranchFId','BranchId');
+    }
+    /**
+     * Get all of the comments for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tinvoice(): HasMany
+    {
+        return $this->hasMany(Tinvoice::class);
     }
 }

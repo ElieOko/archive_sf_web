@@ -20,13 +20,15 @@ class TBrancheController extends Controller
      */
     public function create(Request $request)
     {
-        //
-                # code...
-        $fields = $request->validate([ 'BranchName' => 'required|string|unique:TBranches,BranchName']);
-        $branche = TBranche::create(['BranchName' => $fields['BranchName']]);
-        $response = ['message' => "Save",];  
-        return response($response,201);
-
+        try {
+            $fields = $request->validate([ 'BranchName' => 'required|string|unique:TBranches,BranchName']);
+            $branche = TBranche::create(['BranchName' => $fields['BranchName']]);
+            $response = ['message' => "Save",];  
+            return response($response,201);
+        } catch (\Throwable $th) {
+            $response = ['message' => $th->getMessage()]; 
+            return  $response;
+        }
     }
 
     /**

@@ -15,12 +15,11 @@ class TinvoiceController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function getAllInvoice()
     {
-        //
+        $invoice = Tinvoice::with('user.branch','invoicekey','directory')->get();
+        $response = $invoice;
+       return  response($response,201);
     }
 
     /**
@@ -28,23 +27,93 @@ class TinvoiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $fields = $request->validate([
+                'InvoiceCode' => 'required|string|unique:TInvoices',
+                'InvoiceDesc' => 'required|string',
+                'InvoiceBarCode'=>'required|string',
+                'UserFId'=>'int',
+                'DirectoryFId'=>'required|int',
+                'BranchFId'=>'required|int',
+                'InvoiceDate'=>'string',
+                'InvoiceKeyFId'=>'required|int',
+                'InvoicePath'=>'string',
+                'AndroidVersion'=>'string',
+                'InvoiceUniqueId'=>'string',
+                'ClientName'=>'string',
+                'ClientPhone'=>'string',
+                'ExpiredDate'=>'string'    
+            ]);
+                $invoice = Tinvoice::create(
+                    ['InvoiceCode' => $fields['InvoiceCode'],
+                    'InvoiceDesc' =>$fields['InvoiceDesc'],
+                    'InvoiceBarCode' =>$fields['InvoiceBarCode'] ,
+                    'UserFId'=>$fields['UserFId'],
+                    'DirectoryFId'=>$fields['DirectoryFId'],
+                    'BranchFId'=>$fields['BranchFId'],
+                    'InvoiceDate'=>$fields['InvoiceDate'],
+                    'InvoiceKeyFId'=> $fields['InvoiceKeyFId'],
+                    'InvoicePath'=> $fields['InvoicePath'],
+                    'AndroidVersion'=> $fields['AndroidVersion'],
+                    'InvoiceUniqueId'=> $fields['InvoiceUniqueId'],
+                    'ClientName'=> $fields['ClientName'],
+                    'ClientPhone'=> $fields['ClientPhone'],
+                    'ExpiredDate'=>$fields['ExpiredDate']
+                    ]
+                );
+                $response = ['message' => "Save"];  
+            return response($response,201);
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response = ['message' => $th->getMessage()]; 
+            return  $response;
+        }
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Tinvoice $tinvoice)
+    public function show($id)
     {
         //
+        try {
+            $invoice = Tinvoice::find($id);
+            return response($invoice,201);
+        } catch (\Throwable $th) {
+            
+        }
+       
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tinvoice $tinvoice)
+    public function edit(Request $request,$id)
     {
         //
+        try {
+                
+            $data = [
+                'InvoiceDesc' =>$request->InvoiceDesc,
+                'InvoiceBarCode'=>$request->InvoiceBarCode];
+            $invoice = Tinvoice::find($id);
+            if(!$invoice){
+                
+            }
+            $actualy = $invoice->update([
+                'InvoiceDesc' =>$data['InvoiceDesc'],
+                'InvoiceBarCode' =>$data['InvoiceBarCode']
+            ]);
+            $response =[
+                'message'=>"Success"
+            ];
+            return response($response,201);
+        } catch (\Throwable $th) {
+            $response = ['message' => $th->getMessage()]; 
+            return  $response;
+        }
     }
 
     /**
@@ -58,8 +127,20 @@ class TinvoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tinvoice $tinvoice)
+    public function destroy($id)
     {
         //
+        try {
+            $invoice = Tinvoice::find($id);
+            if($invoice){
+              $invoice->delete();
+              return response(['message'=>"Suppression réussi avec succès"],201);
+            }
+        } catch (\Throwable $th) {
+            
+        }
+
+
+
     }
 }
