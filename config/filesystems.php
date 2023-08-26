@@ -55,12 +55,25 @@ return [
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
             'throw' => false,
         ],
-        'gcs'=>[
+
+        'gcs' => [
             'driver' => 'gcs',
-            'key' => env('GOOGLE_CLOUD_ACCESS_KEY_ID'),
-            'secret' => env('GOOGLE_CLOUD_SECRET_ACCESS_KEY'),
-            'region' => env('GOOGLE_CLOUD_DEFAULT_REGION'),
-            'bucket' => env('GOOGLE_CLOUD_BUCKET')
+            'project_id' => env('GOOGLE_CLOUD_PROJECT_ID', 'infinite-strata-226508'),
+            'key_file' =>[
+                'type' => env('GOOGLE_CLOUD_ACCOUNT_TYPE'),
+                'private_key_id' => env('GOOGLE_CLOUD_PRIVATE_KEY_ID'),
+                'private_key' => env('GOOGLE_CLOUD_PRIVATE_KEY'),
+                'client_email' => env('GOOGLE_CLOUD_CLIENT_EMAIL'),
+                'client_id' => env('GOOGLE_CLOUD_CLIENT_ID'),
+                'auth_uri' => env('GOOGLE_CLOUD_AUTH_URI'),
+                'token_uri' => env('GOOGLE_CLOUD_TOKEN_URI'),
+                'auth_provider_x509_cert_url' => env('GOOGLE_CLOUD_AUTH_PROVIDER_CERT_URL'),
+                'client_x509_cert_url' => env('GOOGLE_CLOUD_CLIENT_CERT_URL'),
+            ], // optional: /path/to/service-account.json
+            'bucket' => env('GOOGLE_CLOUD_STORAGE_BUCKET', 'infinite-strata-226508.appspot.com'),
+            'path_prefix' => env('GOOGLE_CLOUD_STORAGE_PATH_PREFIX', null), // optional: /default/path/to/apply/in/bucket
+            'storage_api_uri' => env('GOOGLE_CLOUD_STORAGE_API_URI', null), // see: Public URLs below
+            'visibility' => 'public', // optional: public|private
         ],
 
     ],
