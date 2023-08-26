@@ -41,25 +41,37 @@ class TpictureController extends Controller
                 'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             ]);
             $original_name = $request->file('image')->getClientOriginalName();
-       
             if ($request->hasFile('image')) {
                 // ...
                 $invoice = Tinvoice::where('InvoiceUniqueId', $request->uniqueId)->first();
                 $branchName =(TBranche::find($invoice->BranchFId))->BranchName;
                 $file_name =  "$branchName-".time()."-$original_name";
                 $path = $request->image->storeAs("images", $file_name );
-                $imageUrl ="http://localhost:8000". Storage::url($file_name);
-                Tpicture::create([
-                    'PictureName'=>$file_name,
-                    'PictureOriginalName'=>$original_name,
-                    'PicturePath'=>$path,
-                    'PublicUrl'=>$imageUrl,
-                    'InvoiceFId'=>$invoice->InvoiceId
-                ]);
-                $response = [
-                    'message' => 'Success '.$invoice->InvoiceId,
-                ];  
-                return response($response,201);
+                $fileContents = $request->file('image');
+                $success = Storage::disk('gcs')->putFileAs('GombeIT/Archive-Public/', $fileContents,$file_name );
+                $fullPath = Storage::disk('gcs')->path( $fileContents );
+                if ($success) {
+                    # code...
+                    Tpicture::create([
+                        'PictureName'=>$file_name,
+                        'PictureOriginalName'=>$original_name,
+                        'PicturePath'=>$path,
+                        'PublicUrl'=>$fullPath,
+                        'InvoiceFId'=>$invoice->InvoiceId
+                    ]);
+                    $response = [
+                        'vr'=> $fullPath,
+                        'message' => 'Success '.$invoice->InvoiceId,
+                    ];  
+                    return response($response,201);
+                }
+                else{
+                    $response = [
+                        'message' => 'No add '
+                    ];  
+                    return response($response,200);
+                }
+                
             }
             }
         catch (\Throwable $th) {
