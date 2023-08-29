@@ -38,7 +38,7 @@ class TpictureController extends Controller
         try {
             //code...
             $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:10302048',
             ]);
             $original_name = $request->file('image')->getClientOriginalName();
             if ($request->hasFile('image')) {
@@ -46,21 +46,22 @@ class TpictureController extends Controller
                 $invoice = Tinvoice::where('InvoiceUniqueId', $request->uniqueId)->first();
                 $branchName =(TBranche::find($invoice->BranchFId))->BranchName;
                 $file_name =  "$branchName-".time()."-$original_name";
-                $path = $request->image->storeAs("images", $file_name );
+                // $path = $request->image->storeAs("images", $file_name );
+                $path = "GombeIT/Archive-Public/";
                 $fileContents = $request->file('image');
+                $url = "https://storage.googleapis.com/infinite-strata-226508.appspot.com/GombeIT/Archive-Public/$file_name";
                 $success = Storage::disk('gcs')->putFileAs('GombeIT/Archive-Public/', $fileContents,$file_name );
-                $fullPath = Storage::disk('gcs')->path( $fileContents );
                 if ($success) {
                     # code...
                     Tpicture::create([
                         'PictureName'=>$file_name,
                         'PictureOriginalName'=>$original_name,
                         'PicturePath'=>$path,
-                        'PublicUrl'=>$fullPath,
+                        'PublicUrl'=>$url,
                         'InvoiceFId'=>$invoice->InvoiceId
                     ]);
                     $response = [
-                        'vr'=> $fullPath,
+                     
                         'message' => 'Success '.$invoice->InvoiceId,
                     ];  
                     return response($response,201);

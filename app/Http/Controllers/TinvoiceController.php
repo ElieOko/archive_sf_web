@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tinvoice;
+use App\Models\Tpicture;
 use Illuminate\Http\Request;
 
 class TinvoiceController extends Controller
@@ -30,7 +31,7 @@ class TinvoiceController extends Controller
         try {
             $fields = $request->validate([
                 'InvoiceCode' => 'required|string|unique:TInvoices',
-                'InvoiceDesc' => 'required|string',
+                'InvoiceDesc' => '',
                 'InvoiceBarCode'=>'required|string',
                 'UserFId'=>'int',
                 'DirectoryFId'=>'required|int',
@@ -133,7 +134,12 @@ class TinvoiceController extends Controller
         try {
             $invoice = Tinvoice::find($id);
             if($invoice){
+            //   $picture = Tpicture::where("InvoiceFId",$id)->get();
+            //   foreach ($picture  as $item ) {
+            //     Storage::disk('gcs')->delete($item['PublicUrl']);
+            //   }
               $invoice->delete();
+
               return response(['message'=>"Suppression réussi avec succès"],201);
             }
         } catch (\Throwable $th) {
