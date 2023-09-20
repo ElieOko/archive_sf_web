@@ -43,12 +43,14 @@ class UserController extends Controller
             'password'=>'required|string|confirmed',
             'email' =>'required|string',
             'BranchFId'=>'required|int',
+            'role'=>'integer',
         ]);
         $user = User::create([
             'username' => $fields['username'],
             'password' => bcrypt($fields['password']),
             'email' => $fields['email'],
-            'BranchFId' => $fields['BranchFId']
+            'BranchFId' => $fields['BranchFId'],
+            'role'=>$fields['role']
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
         $response = [
@@ -63,4 +65,5 @@ class UserController extends Controller
         $user = User::all();
         return response($user,201);
     }
+    
 }

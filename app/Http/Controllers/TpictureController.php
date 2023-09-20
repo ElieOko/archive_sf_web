@@ -46,7 +46,6 @@ class TpictureController extends Controller
                 $invoice = Tinvoice::where('InvoiceUniqueId', $request->uniqueId)->first();
                 $branchName =(TBranche::find($invoice->BranchFId))->BranchName;
                 $file_name =  "$branchName-".time()."-$original_name";
-                // $path = $request->image->storeAs("images", $file_name );
                 $path = "GombeIT/Archive-Public/";
                 $fileContents = $request->file('image');
                 $url = "https://storage.googleapis.com/infinite-strata-226508.appspot.com/GombeIT/Archive-Public/$file_name";
@@ -61,7 +60,6 @@ class TpictureController extends Controller
                         'InvoiceFId'=>$invoice->InvoiceId
                     ]);
                     $response = [
-                     
                         'message' => 'Success '.$invoice->InvoiceId,
                     ];  
                     return response($response,201);
@@ -146,8 +144,7 @@ $imageUrls = [];
 foreach ($picture as $invoiceFId => $images) {
     foreach ($images as $image) {
         $imageUrl = Storage::url($image->PictureName);
-       // Chemin relatif vers l'image stockée
-
+        // Chemin relatif vers l'image stockée
         // Créez le lien symbolique vers l'image
         // Storage::link($imagePath, public_path("storage/images/{$image->PictureName}"));
 

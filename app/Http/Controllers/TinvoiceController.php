@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tinvoice;
 use App\Models\Tpicture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TinvoiceController extends Controller
 {
@@ -18,11 +19,10 @@ class TinvoiceController extends Controller
 
     public function getAllInvoice()
     {
-        $invoice = Tinvoice::with('user.branch','invoicekey','directory')->get();
+        $invoice = Tinvoice::with('user.branch','invoicekey','directory',"pictures")->paginate(1);
         $response = $invoice;
        return  response($response,201);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -30,20 +30,20 @@ class TinvoiceController extends Controller
     {
         try {
             $fields = $request->validate([
-                'InvoiceCode' => 'required|string|unique:TInvoices',
+                'InvoiceCode' => 'required|string',
                 'InvoiceDesc' => '',
-                'InvoiceBarCode'=>'required|string',
+                'InvoiceBarCode'=>'',
                 'UserFId'=>'int',
-                'DirectoryFId'=>'required|int',
-                'BranchFId'=>'required|int',
+                'DirectoryFId'=>'int',
+                'BranchFId'=>'int',
                 'InvoiceDate'=>'string',
-                'InvoiceKeyFId'=>'required|int',
-                'InvoicePath'=>'string',
+                'InvoiceKeyFId'=>'int',
+                'InvoicePath'=>'',
                 'AndroidVersion'=>'string',
                 'InvoiceUniqueId'=>'string',
-                'ClientName'=>'string',
-                'ClientPhone'=>'string',
-                'ExpiredDate'=>'string'    
+                'ClientName'=>'',
+                'ClientPhone'=>'',
+                'ExpiredDate'=>''    
             ]);
                 $invoice = Tinvoice::create(
                     ['InvoiceCode' => $fields['InvoiceCode'],
@@ -62,16 +62,14 @@ class TinvoiceController extends Controller
                     'ExpiredDate'=>$fields['ExpiredDate']
                     ]
                 );
-                $response = ['message' => "Save"];  
+                $response = ['message' => "Save","invoiceId"=>$invoice->InvoiceId];  
             return response($response,201);
         } catch (\Throwable $th) {
             //throw $th;
             $response = ['message' => $th->getMessage()]; 
             return  $response;
         }
-
     }
-
     /**
      * Display the specified resource.
      */
@@ -79,30 +77,24 @@ class TinvoiceController extends Controller
     {
         //
         try {
-            $invoice = Tinvoice::find($id);
+            //::with('user.branch','invoicekey','directory',"pictures")
+           // ->with('user.branch', 'invoicekey', 'directory',"pictures")
+            $invoice = Tinvoice::where("InvoiceId",$id)->with('user.branch', 'invoicekey', 'directory',"pictures")->get();
             return response($invoice,201);
         } catch (\Throwable $th) {
-            
         }
-       
-
     }
-
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Request $request,$id)
     {
         //
-        try {
-                
+        try {  
             $data = [
                 'InvoiceDesc' =>$request->InvoiceDesc,
                 'InvoiceBarCode'=>$request->InvoiceBarCode];
             $invoice = Tinvoice::find($id);
-            if(!$invoice){
-                
-            }
             $actualy = $invoice->update([
                 'InvoiceDesc' =>$data['InvoiceDesc'],
                 'InvoiceBarCode' =>$data['InvoiceBarCode']
@@ -116,15 +108,41 @@ class TinvoiceController extends Controller
             return  $response;
         }
     }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tinvoice $tinvoice)
+    public function filterInvoice(Request $request)
     {
-        //
+        $query =Tinvoice::query()
+        ->when(request('InvoiceCode'), function ($q) {
+            return $q->where('InvoiceCode', request('InvoiceCode'));
+        })
+        ->when(request('InvoiceDesc'), function ($q) {
+            return $q->where('InvoiceDesc', request('InvoiceDesc'),);
+        })
+        ->when(request('InvoiceBarCode'), function ($q) {
+            return $q->where('InvoiceBarCode', request('InvoiceBarCode'),);
+        })
+        ->when(request('InvoiceDate'), function ($q) {
+            return $q->where('InvoiceDate', request('InvoiceDate'),);
+        })
+        ->when(request('UserFId'), function ($q) {
+            return $q->where('UserFId', request('UserFId'),);
+        })
+        ->when(request('DirectoryFId'), function ($q) {
+            return $q->where('DirectoryFId', request('DirectoryFId'),);
+        })
+        ->when(request('InvoiceKeyFId'), function ($q) {
+            return $q->where('InvoiceKeyFId', request('InvoiceKeyFId'),);
+        })
+        ->when(request('BranchFId'), function ($q) {
+            return $q->where('BranchFId', request('BranchFId'),);
+        })
+        ->with('user.branch', 'invoicekey', 'directory',"pictures");
+        $data = ($query->paginate(1));
+        $response =  $data;
+        return response($response,201);
     }
-
     /**
      * Remove the specified resource from storage.
      */
@@ -134,19 +152,14 @@ class TinvoiceController extends Controller
         try {
             $invoice = Tinvoice::find($id);
             if($invoice){
-            //   $picture = Tpicture::where("InvoiceFId",$id)->get();
-            //   foreach ($picture  as $item ) {
-            //     Storage::disk('gcs')->delete($item['PublicUrl']);
-            //   }
+            $picture = Tpicture::where("InvoiceFId",$id)->get();
+              foreach ($picture  as $item ) {
+                Storage::disk('gcs')->delete("GombeIT/Archive-Public/".$item['PictureName']);
+              }
               $invoice->delete();
-
               return response(['message'=>"Suppression réussi avec succès"],201);
             }
-        } catch (\Throwable $th) {
-            
+        } catch (\Throwable $th) {    
         }
-
-
-
     }
 }

@@ -55,9 +55,34 @@ class Tinvoice extends Model
     {
         return $this->belongsTo(TBranche::class, 'BranchFId' , 'BranchId');
     }
-    public function picture()
+    public function pictures()
     {
-        return $this->hasMany(Tpicture::class);
+        return $this->hasMany(Tpicture::class,"InvoiceFId");
     }
-   
+    /**
+     * Get all of the comments for the Tinvoice
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    // public function comments(): HasMany
+    // {
+    //     return $this->hasMany(Comment::class, 'foreign_key', 'local_key');
+    // }
+    public function scopeFilters(
+        Builder $query,
+        ?string $sortBy,
+        ?string $direction,
+    ): void {
+        $query->when(
+            value: $sortBy,
+            callback: static function (Builder $query, $sortBy) use ($direction): void {
+                match($sortBy) {
+                    'title' => $query->orderBy('title', $direction ?? 'DESC'),
+                    'status' => $query->orderByStatus($direction),
+                    'analysis' => $query->orderByLikesAndCommentsCount($direction),
+                    default => throw new RuntimeException('SortBy parameter in missing.'),
+                };
+            }
+        );
+    }
 }
