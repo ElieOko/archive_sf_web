@@ -13,21 +13,24 @@ return new class extends Migration
     {
         Schema::create('TUsers', function (Blueprint $table) {
             $table->id("UserId");
-            $table->string('username');
-            $table->string('password');
-            $table->integer('role')->default(0);
-            $table->string('serialNumber')->nullable();
-            $table->string('smstoken')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('email')->unique();
+            $table->string('UserName');
+            $table->string('UserPass');
+            $table->integer('Admin')->default(0);
+            $table->string('SerialNumber')->nullable();
+            $table->string('SMSToken')->nullable();
+            $table->string('SMSTokenExpiry')->nullable();
+            $table->string('Phone')->nullable();
+            $table->string('WebAccess')->nullable();
+            $table->string('DbUser')->nullable();
+            $table->string('DbPass')->nullable();
+            $table->string('ClientName')->nullable();
+            $table->string('ClientPhoneNumber')->nullable();
             $table->unsignedBigInteger('BranchFId');
             $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
-            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
-            $table->timestamps();
+           
         });
     }
-
     /**
      * Reverse the migrations.
      */
@@ -35,4 +38,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('TUsers');
     }
+
 };

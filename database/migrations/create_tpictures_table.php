@@ -14,16 +14,14 @@ return new class extends Migration
         Schema::create('TPictures', function (Blueprint $table) {
             $table->id("PictureId");
             $table->unsignedBigInteger('InvoiceFId');
-            $table->foreign('InvoiceFId')->references('InvoiceId')->on('TInvoices')->onDelete('cascade');;
+            $table->foreign('InvoiceFId')->references('InvoiceId')->on('TInvoices')->onDelete('cascade');
             $table->string("PictureName");
             $table->string("PicturePath");
             $table->string("PublicUrl");
-            $table->boolean("isActive")->default(false);
             $table->string("PictureOriginalName");
-            $table->timestamps();
+            $table->string("InsertedTime")->nullable();
         });
     }
-
     /**
      * Reverse the migrations.
      */

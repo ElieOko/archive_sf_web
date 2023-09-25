@@ -17,8 +17,7 @@ class TBranche extends Model
     protected $fillable = [
         'BranchName',
     ];
-    const CREATED_AT = 'creation_date';
-    const UPDATED_AT = 'last_update';
+   
 
     public function user(): HasMany
     {

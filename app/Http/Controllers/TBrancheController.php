@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TBranche;
+use App\Models\Tinvoice;
 use Illuminate\Http\Request;
 
 class TBrancheController extends Controller
@@ -10,6 +11,19 @@ class TBrancheController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function filter(Request $request)
+    {
+        $response = [];
+        $branche =request('BranchName') ;
+        if(count(TBranche::where("BranchName",$branche)->get()) >= 1){
+            $query =Tinvoice::query()->when((TBranche::where("BranchName",request('BranchName'))->get())[0]->BranchId, function ($q) {
+                return $q->where('BranchFId', (TBranche::where("BranchName",request('BranchName'))->get())[0]->BranchId);
+            })->with('user.branch', 'invoicekey', 'directory',"pictures");
+            $data = ($query->paginate(5));
+            $response =  $data;
+        }
+        return response($response,201);
+    }
     public function index()
     {
         //

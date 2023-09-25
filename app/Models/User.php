@@ -13,32 +13,40 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-
     protected $table = "TUsers";
+    public $timestamps = false;
+    protected $rememberTokenName = 'RememberToken';
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
-        'email',
-        'password',
+        'UserName',
+        'UserPass',
+        'DbUser',
+        'DbPass',
         'BranchFId',
-        'role'
+        'Admin',
+        'SerialNumber',
+        'SMSToken',
+        'SMSTokenExpiry',
+        'Phone',
+        'WebAccess',
+        'DbUser',
+        'DbPass',
+        'ClientName',
+        'ClientPhoneNumber'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'UserPass',
+        'RememberToken',
     ];
-
 
     /**
     * The primary key associated with the table.
@@ -50,8 +58,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'UserPass' => 'hashed',
     ];
 
      public function branch()

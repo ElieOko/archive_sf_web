@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('TBranches', function (Blueprint $table) {
-            $table->id('BranchId');
-            $table->string("BranchName");
-            $table->timestamps();
+        Schema::create('TInvoiceKeys', function (Blueprint $table) {
+            $table->id("InvoicekeyId");
+            $table->string("Invoicekey");
+            $table->unsignedBigInteger('DirectoryFId');
+            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('TBranches');
+        Schema::dropIfExists('TInvoiceKeys');
     }
 };

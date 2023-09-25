@@ -11,20 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('TInvoiceKeys', function (Blueprint $table) {
-            $table->id("InvoicekeyId");
-            $table->string("Invoicekey");
+        Schema::create('TUsersDirectories', function (Blueprint $table) {
+            $table->id("UserDirectoryId");
+            $table->unsignedBigInteger('UserFId');
+            $table->foreign('UserFId')->references('UserId')->on('TUsers');
             $table->unsignedBigInteger('DirectoryFId');
             $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
-            $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('TInvoiceKeys');
+        Schema::dropIfExists('TUsersDirectories');
     }
 };

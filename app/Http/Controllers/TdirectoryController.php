@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tinvoice;
 use App\Models\Tdirectory;
 use App\Models\Tinvoicekey;
 use Illuminate\Http\Request;
@@ -11,6 +12,20 @@ class TdirectoryController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function filter(Request $request)
+    {   
+        $response = [];
+        $directory = request('directory');
+       //return response(["value "=>(Tdirectory::where("DirectoryName",$directory)->get())[0]->DirectoryId],201);
+        if(count(Tdirectory::where("DirectoryName",$directory)->get()) >= 1){
+            $query =Tinvoice::query()->when((Tdirectory::where("DirectoryName",request('directory'))->get())[0]->DirectoryId, function ($q) {
+                return $q->where('DirectoryFId', (Tdirectory::where("DirectoryName",$directory)->get())[0]->DirectoryId);
+            })->with('user.branch', 'invoicekey', 'directory',"pictures");
+            $data = ($query->paginate(5));
+            $response =  $data;
+        }
+        return response($response,201);
+    }
     public function index()
     {
         //
@@ -45,16 +60,14 @@ class TdirectoryController extends Controller
     {
         //
         try {
-            $fields = $request->validate([ 'DirectoryName' => 'required|string|unique:tdirectories,DirectoryName','parentId'=>'nullable|integer']);
-            $branche = Tdirectory::create(['DirectoryName' => $fields['DirectoryName'],'parentId'=> $fields['parentId']]);
+            $fields = $request->validate([ 'DirectoryName' => 'required|string|unique:tdirectories,DirectoryName','ParentFId'=>'nullable|integer']);
+            $branche = Tdirectory::create(['DirectoryName' => $fields['DirectoryName'],'ParentFId'=> $fields['ParentFId'],'ForClient'=>$request->ForClient]);
             $response = ['message' => "Save",];  
             return response($response,201);
         } catch (\Throwable $th) {
             $response = ['message' => $th->getMessage()]; 
             return  $response;
         }
-
-
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tinvoice;
 use App\Models\Tinvoicekey;
 use Illuminate\Http\Request;
 
@@ -10,6 +11,19 @@ class TinvoicekeyController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function filter(Request $request)
+    {
+        $response = [];
+        $key =request('Invoicekey') ;
+        if(count(Tinvoicekey::where("Invoicekey",$key)->get()) >= 1){
+            $query =Tinvoice::query()->when((Tinvoicekey::where("Invoicekey",request('Invoicekey'))->get())[0]->InvoicekeyId, function ($q) {
+                return $q->where('InvoiceKeyFId', (Tinvoicekey::where("Invoicekey",request('Invoicekey'))->get())[0]->InvoicekeyId);
+            })->with('user.branch', 'invoicekey', 'directory',"pictures");
+            $data = ($query->paginate(5));
+            $response =  $data;
+        }
+        return response($response,201);
+    }
     public function index()
     {
         //

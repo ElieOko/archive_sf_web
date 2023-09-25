@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('TDirectories', function (Blueprint $table) {
             $table->id("DirectoryId");
             $table->string("DirectoryName");
-            $table->integer("parentId")->nullable();
-            $table->boolean("available")->default(true);
-            $table->timestamps();
+            $table->integer("ParentFId")->nullable();
+            $table->boolean("Available")->nullable()->default(false);
+            $table->boolean("ForClient")->nullable()->default(false);
         });
     }
 

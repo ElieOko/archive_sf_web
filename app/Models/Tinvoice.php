@@ -33,7 +33,9 @@ class Tinvoice extends Model
         'ClientPhone',
         'ExpiredDate'
     ];
-    public $timestamps = false;
+    public $timestamps = true;
+    const CREATED_AT = 'CreatedAt';
+    const UPDATED_AT = 'UpdatedAt';
     /**
      * Get the user that owns the Tinvoice
      *

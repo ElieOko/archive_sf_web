@@ -13,6 +13,7 @@ class TpictureController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
         /*
@@ -48,6 +49,8 @@ class TpictureController extends Controller
                 $file_name =  "$branchName-".time()."-$original_name";
                 $path = "GombeIT/Archive-Public/";
                 $fileContents = $request->file('image');
+                $request->image->storeAs("image", $file_name );
+                
                 $url = "https://storage.googleapis.com/infinite-strata-226508.appspot.com/GombeIT/Archive-Public/$file_name";
                 $success = Storage::disk('gcs')->putFileAs('GombeIT/Archive-Public/', $fileContents,$file_name );
                 if ($success) {
@@ -61,6 +64,7 @@ class TpictureController extends Controller
                     ]);
                     $response = [
                         'message' => 'Success '.$invoice->InvoiceId,
+                        'path'=>storage_path()
                     ];  
                     return response($response,201);
                 }
@@ -70,7 +74,54 @@ class TpictureController extends Controller
                     ];  
                     return response($response,200);
                 }
+            }
+            }
+        catch (\Throwable $th) {
+            $response = ['message' => $th->getMessage()]; 
+            return  $response;
+        }
+    }
+    public function storePicture(Request $request,$id)
+    {
+        //
+        try {
+            //code...
+            $request->validate([
+                'image' => 'required|image|mimes:jpeg,png,jpg|max:10302048',
+            ]);
+            $original_name = $request->file('image')->getClientOriginalName();
+            if ($request->hasFile('image')) {
+                // ...
+                $invoice = Tinvoice::where('InvoiceId', $id)->first();
+                $branchName =(TBranche::find($invoice->BranchFId))->BranchName;
+                $file_name =  "$branchName-".time()."-$original_name";
+                $path = "GombeIT/Archive-Public/";
+                $fileContents = $request->file('image');
+                $request->image->storeAs("image", $file_name );
                 
+                $url = "https://storage.googleapis.com/infinite-strata-226508.appspot.com/GombeIT/Archive-Public/$file_name";
+                $success = Storage::disk('gcs')->putFileAs('GombeIT/Archive-Public/', $fileContents,$file_name );
+                if ($success) {
+                    # code...
+                    Tpicture::create([
+                        'PictureName'=>$file_name,
+                        'PictureOriginalName'=>$original_name,
+                        'PicturePath'=>$path,
+                        'PublicUrl'=>$url,
+                        'InvoiceFId'=>$id
+                    ]);
+                    $response = [
+                        'message' => 'Success '.$id,
+                        'path'=>storage_path()
+                    ];  
+                    return response($response,201);
+                }
+                else{
+                    $response = [
+                        'message' => 'No add '
+                    ];  
+                    return response($response,200);
+                }
             }
             }
         catch (\Throwable $th) {
@@ -96,7 +147,11 @@ class TpictureController extends Controller
     {
         //
         $picture = Tpicture::where('InvoiceFId', $id)->get();
-        return response($picture,201);
+        $data = [];
+        foreach ($picture as $items){
+            $data =[$items->PublicUrl];
+        }
+        return response($data,201);
     }
     public function getAllImages()
     {

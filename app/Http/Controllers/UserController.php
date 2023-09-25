@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Tinvoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -13,14 +14,14 @@ class UserController extends Controller
     {
         try {
             $fields = $request->validate([
-                'username' => 'required|string',
-                'password'=>'required|string',
+                'UserName' => 'required|string',
+                'UserPass'=>'required|string',
             ]);
-            $user = User::where('username',$fields['username'])->first();
-            if(!$user || !Hash::check($fields['password'], $user->password)){
+            $user = User::where('UserName',$fields['UserName'])->first();
+            if(!$user || !Hash::check($fields['UserPass'], $user->UserPass)){
                 return response(
                     [
-                        "message"=>"User Unauthorized"
+                        "message"=>"Utilisateur non trouvé"
                     ],200
                 );
             }
@@ -35,22 +36,21 @@ class UserController extends Controller
             return  $response;
         }
     }
-
     public function register(Request $request)
     {
         $fields = $request->validate([
-            'username' => 'required|string|unique:TUsers,username',
-            'password'=>'required|string|confirmed',
-            'email' =>'required|string',
+            'UserName' => 'required|string|unique:TUsers,UserName',
+            'UserPass'=>'required_with:password_confirmation|same:password_confirmation',
             'BranchFId'=>'required|int',
-            'role'=>'integer',
+            'Admin'=>'integer',
         ]);
         $user = User::create([
-            'username' => $fields['username'],
-            'password' => bcrypt($fields['password']),
-            'email' => $fields['email'],
+            'UserName' => $fields['UserName'],
+            'UserPass' => bcrypt($fields['UserPass']),
             'BranchFId' => $fields['BranchFId'],
-            'role'=>$fields['role']
+            'Admin'=>$fields['Admin'],
+            "DbUser"=>$fields['UserName'],
+            "DbPass"=>$fields['UserPass']
         ]);
         $token = $user->createToken('myapptoken')->plainTextToken;
         $response = [
@@ -59,6 +59,19 @@ class UserController extends Controller
         ];  
         return response($response,201);
     }
+    public function filter(Request $request)
+    {   
+        $response = [];
+        if(count(User::where("UserName",request('UserName'))->get())>=1){
+            $query =Tinvoice::query()->when((User::where("UserName",request('UserName'))->get())[0]->UserId, function ($q) {
+                return $q->where('UserFId', (User::where("UserName",request('UserName'))->get())[0]->UserId);
+            })->with('user.branch', 'invoicekey', 'directory',"pictures");
+            $data = ($query->paginate(5));
+            $response =  $data;
+        }
+        return response($response,201);
+    }
+
 
     public function getAllUser()
     {

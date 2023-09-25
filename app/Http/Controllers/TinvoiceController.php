@@ -19,8 +19,14 @@ class TinvoiceController extends Controller
 
     public function getAllInvoice()
     {
-        $invoice = Tinvoice::with('user.branch','invoicekey','directory',"pictures")->paginate(1);
+        $invoice = Tinvoice::with('user.branch','invoicekey','directory',"pictures")->orderBy('InvoiceId', 'desc')->paginate(5);
         $response = $invoice;
+       return  response($response,201);
+    }
+    public function getAllInvoice2($id)
+    {
+        $query =Tinvoice::where('UserFId', $id)->with('user.branch','invoicekey','directory',"pictures")->orderBy('InvoiceId', 'desc')->paginate(5);
+        $response = $query ;
        return  response($response,201);
     }
     /**
@@ -29,6 +35,7 @@ class TinvoiceController extends Controller
     public function store(Request $request)
     {
         try {
+            $key = 0;
             $fields = $request->validate([
                 'InvoiceCode' => 'required|string',
                 'InvoiceDesc' => '',
@@ -37,7 +44,7 @@ class TinvoiceController extends Controller
                 'DirectoryFId'=>'int',
                 'BranchFId'=>'int',
                 'InvoiceDate'=>'string',
-                'InvoiceKeyFId'=>'int',
+                'InvoiceKeyFId'=>'',
                 'InvoicePath'=>'',
                 'AndroidVersion'=>'string',
                 'InvoiceUniqueId'=>'string',
@@ -45,6 +52,9 @@ class TinvoiceController extends Controller
                 'ClientPhone'=>'',
                 'ExpiredDate'=>''    
             ]);
+            if($fields['InvoiceKeyFId'] != 0){
+                $key = $fields['InvoiceKeyFId'];
+            }
                 $invoice = Tinvoice::create(
                     ['InvoiceCode' => $fields['InvoiceCode'],
                     'InvoiceDesc' =>$fields['InvoiceDesc'],
@@ -53,7 +63,7 @@ class TinvoiceController extends Controller
                     'DirectoryFId'=>$fields['DirectoryFId'],
                     'BranchFId'=>$fields['BranchFId'],
                     'InvoiceDate'=>$fields['InvoiceDate'],
-                    'InvoiceKeyFId'=> $fields['InvoiceKeyFId'],
+                    'InvoiceKeyFId'=>  $key,
                     'InvoicePath'=> $fields['InvoicePath'],
                     'AndroidVersion'=> $fields['AndroidVersion'],
                     'InvoiceUniqueId'=> $fields['InvoiceUniqueId'],
@@ -75,10 +85,7 @@ class TinvoiceController extends Controller
      */
     public function show($id)
     {
-        //
         try {
-            //::with('user.branch','invoicekey','directory',"pictures")
-           // ->with('user.branch', 'invoicekey', 'directory',"pictures")
             $invoice = Tinvoice::where("InvoiceId",$id)->with('user.branch', 'invoicekey', 'directory',"pictures")->get();
             return response($invoice,201);
         } catch (\Throwable $th) {
@@ -111,7 +118,43 @@ class TinvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function filterInvoice(Request $request)
+    {
+        $query =Tinvoice::query()
+        ->when(request('InvoiceCode'), function ($q) {
+            return $q->where('InvoiceCode', request('InvoiceCode'));
+        })
+        ->when(request('InvoiceDesc'), function ($q) {
+            return $q->where('InvoiceDesc', request('InvoiceDesc'),);
+        })
+        ->when(request('InvoiceBarCode'), function ($q) {
+            return $q->where('InvoiceBarCode', request('InvoiceBarCode'),);
+        })
+        ->when([request('dateFrom'),request('dateTo')], function ($q) {
+            return $q->whereBetween('InvoiceDate', [request('dateFrom'),request('dateTo')],);
+        })
+        ->when(request('InvoiceDate'), function ($q) {
+            return $q->where('InvoiceDate', request('InvoiceDate'),);
+        })
+        ->when(request('UserFId'), function ($q) {
+            return $q->where('UserFId', request('UserFId'),);
+        })
+        ->when(request('DirectoryFId'), function ($q) {
+            return $q->where('DirectoryFId', request('DirectoryFId'),);
+        })
+        ->when(request('InvoiceKeyFId'), function ($q) {
+            return $q->where('InvoiceKeyFId', request('InvoiceKeyFId'),);
+        })
+        ->when(request('BranchFId'), function ($q) {
+            return $q->where('BranchFId', request('BranchFId'),);
+        })
+        ->with('user.branch', 'invoicekey', 'directory',"pictures");
+        $data = ($query->paginate(5));
+        $response =  $data;
+        return response($response,201);
+    }
+    public function filterInvoice2(Request $request)
     {
         $query =Tinvoice::query()
         ->when(request('InvoiceCode'), function ($q) {
@@ -139,10 +182,42 @@ class TinvoiceController extends Controller
             return $q->where('BranchFId', request('BranchFId'),);
         })
         ->with('user.branch', 'invoicekey', 'directory',"pictures");
-        $data = ($query->paginate(1));
+        $data = ($query->paginate(5));
         $response =  $data;
         return response($response,201);
     }
+    // public function filterInvoiceUser(Request $request,$id)
+    // {
+    //     $query =Tinvoice::query()
+    //     ->when(request('InvoiceCode'), function ($q) {
+    //         return $q->where('InvoiceCode', request('InvoiceCode'))->where('UserFId',request('UserFId'));
+    //     })
+    //     ->when(request('InvoiceDesc'), function ($q) {
+    //         return $q->where('InvoiceDesc', request('InvoiceDesc'),);
+    //     })
+    //     ->when(request('InvoiceBarCode'), function ($q) {
+    //         return $q->where('InvoiceBarCode', request('InvoiceBarCode'),);
+    //     })
+    //     ->when(request('InvoiceDate'), function ($q) {
+    //         return $q->where('InvoiceDate', request('InvoiceDate'),);
+    //     })
+    //     ->when(request('UserFId'), function ($q) {
+    //         return $q->where('UserFId', request('UserFId'),);
+    //     })
+    //     ->when(request('DirectoryFId'), function ($q) {
+    //         return $q->where('DirectoryFId', request('DirectoryFId'),);
+    //     })
+    //     ->when(request('InvoiceKeyFId'), function ($q) {
+    //         return $q->where('InvoiceKeyFId', request('InvoiceKeyFId'),);
+    //     })
+    //     ->when(request('BranchFId'), function ($q) {
+    //         return $q->where('BranchFId', request('BranchFId'),);
+    //     })
+    //     ->with('user.branch', 'invoicekey', 'directory',"pictures");
+    //     $data = ($query->paginate(5));
+    //     $response =  $data;
+    //     return response($response,201);
+    // }
     /**
      * Remove the specified resource from storage.
      */

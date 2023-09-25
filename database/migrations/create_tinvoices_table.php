@@ -22,9 +22,8 @@ return new class extends Migration
             $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
             $table->unsignedBigInteger('BranchFId');
             $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
-            $table->timestamps();
             $table->date("InvoiceDate");
-            $table->unsignedBigInteger('InvoiceKeyFId');
+            $table->unsignedBigInteger('InvoiceKeyFId')->nullable();
             $table->foreign('InvoicekeyFId')->references('InvoiceKeyId')->on('TInvoiceKeys');
             $table->string("InvoicePath")->nullable();
             $table->string("AndroidVersion")->nullable();
@@ -32,6 +31,7 @@ return new class extends Migration
             $table->string("ClientName")->nullable();
             $table->string("ClientPhone")->nullable();
             $table->date("ExpiredDate")->nullable();
+            $table->timestamps();
         });
     }
 
