@@ -12,7 +12,7 @@ class Tinvoicekey extends Model
     // const CREATED_AT = 'creation_date';
     // const UPDATED_AT = 'last_update';
 
-    protected $primaryKey = "InvoicekeyId";
+    protected $primaryKey = "InvoiceKeyId";
     protected $table = "TInvoiceKeys";
     protected $fillable = [
         'Invoicekey',

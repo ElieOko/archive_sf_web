@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('TInvoiceKeys', function (Blueprint $table) {
-            $table->id("InvoicekeyId");
+            $table->id("InvoiceKeyId");
             $table->string("Invoicekey");
             $table->unsignedBigInteger('DirectoryFId');
             $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
