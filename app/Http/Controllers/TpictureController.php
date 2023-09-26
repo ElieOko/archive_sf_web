@@ -39,7 +39,7 @@ class TpictureController extends Controller
         try {
             //code...
             $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg|max:10302048',
+                'image' => 'required|file|mimes:jpeg,png,jpg|max:10302048',
             ]);
             $original_name = $request->file('image')->getClientOriginalName();
             if ($request->hasFile('image')) {
