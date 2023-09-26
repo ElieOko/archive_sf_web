@@ -17,14 +17,14 @@ return new class extends Migration
             $table->string("InvoiceDesc")->nullable();
             $table->string("InvoiceBarCode")->nullable();
             $table->unsignedBigInteger('UserFId');
-            $table->foreign('UserFId')->references('UserId')->on('TUsers');
+            // $table->foreign('UserFId')->references('UserId')->on('TUsers');
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
+            // $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
             $table->unsignedBigInteger('BranchFId');
-            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
+            // $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
             $table->date("InvoiceDate");
             $table->unsignedBigInteger('InvoiceKeyFId')->nullable();
-            $table->foreign('InvoicekeyFId')->references('InvoiceKeyId')->on('TInvoiceKeys');
+            //$table->foreign('InvoicekeyFId')->references('InvoiceKeyId')->on('TInvoiceKeys');
             $table->string("InvoicePath")->nullable();
             $table->string("AndroidVersion")->nullable();
             $table->string("InvoiceUniqueId")->nullable();

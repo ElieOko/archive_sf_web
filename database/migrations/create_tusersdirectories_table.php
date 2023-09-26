@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('TUsersDirectories', function (Blueprint $table) {
             $table->id("UserDirectoryId");
             $table->unsignedBigInteger('UserFId');
-            $table->foreign('UserFId')->references('UserId')->on('TUsers');
+          //  $table->foreign('UserFId')->references('UserId')->on('TUsers');
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
+           // $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
         });
     }
     /**

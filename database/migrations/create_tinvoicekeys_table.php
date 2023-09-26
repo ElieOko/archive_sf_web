@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id("InvoiceKeyId");
             $table->string("Invoicekey");
             $table->unsignedBigInteger('DirectoryFId');
-            $table->foreign('DirectoryFId')->references('DirectoryId')->on('TDirectories');
         });
     }
     /**

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('UserName');
             $table->string('UserPass');
             $table->unsignedBigInteger('BranchFId');
-            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
+           // $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
             $table->string('BranchScope')->nullable();
             $table->integer('Admin')->default(0);
             $table->string("RememberToken")->nullable();
