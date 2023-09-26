@@ -10,7 +10,6 @@ class TBranche extends Model
 {
     use HasFactory;
     protected $table = "TBranches";
-
     protected $primaryKey = "BranchId";
 
     public $timestamps = false;

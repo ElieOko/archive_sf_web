@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Tinvoice extends Model
 {
     use HasFactory;
-
+    protected $table = "TInvoicesHidden";
     protected $primaryKey = "InvoiceId";
 
     protected $fillable = [
@@ -33,9 +33,9 @@ class Tinvoice extends Model
         'ClientPhone',
         'ExpiredDate'
     ];
-    public $timestamps = true;
-    const CREATED_AT = 'CreatedAt';
-    const UPDATED_AT = 'UpdatedAt';
+    public $timestamps = false;
+    // const CREATED_AT = 'CreatedAt';
+    // const UPDATED_AT = 'UpdatedAt';
     /**
      * Get the user that owns the Tinvoice
      *

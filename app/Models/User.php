@@ -16,6 +16,7 @@ class User extends Authenticatable
     protected $table = "TUsers";
     public $timestamps = false;
     protected $rememberTokenName = 'RememberToken';
+    protected $primaryKey = 'UserId'; 
     /**
      * The attributes that are mass assignable.
      *
@@ -35,6 +36,7 @@ class User extends Authenticatable
         'WebAccess',
         'DbUser',
         'DbPass',
+        'BranchScope',
         'ClientName',
         'ClientPhoneNumber'
     ];
@@ -43,23 +45,56 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'UserPass',
-        'RememberToken',
-    ];
+    protected $appends = ['token']; 
+ 
+    protected $hidden = [ 
+        'UserPass', 'RememberToken', 'APIToken' 
+    ]; 
+ 
+    public function getTokenAttribute() { 
+        return $this->attributes['token'] = $this->APIToken ? 1 : 0; 
+    } 
+ 
+    public function getAuthPassword() 
+    { 
+        return $this->UserPass; 
+    } 
+ 
+    public function getRememberToken() 
+    { 
+        return $this->RememberToken; 
+    } 
+ 
+    public function setRememberToken($value) 
+    { 
+        $this->RememberToken = $value; 
+    } 
+ 
+    public function getRememberTokenName() 
+    { 
+        return 'RememberToken'; 
+    } 
+    public function isAdmin() 
+    { 
+        return $this->Admin == 1; 
+    } 
+ 
+    public function hasWebAccess() 
+    { 
+        return $this->WebAccess == 1; 
+    } 
+ 
+    public function isScopedToBranch() 
+    { 
+        return $this->BranchScope == 1; 
+    } 
 
-    /**
-    * The primary key associated with the table.
-    **/
-    protected $primaryKey = "UserId";
     /**
      * The attributes that should be cast.
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'UserPass' => 'hashed',
-    ];
+ 
 
      public function branch()
     {

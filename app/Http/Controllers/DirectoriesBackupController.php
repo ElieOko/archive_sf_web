@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tusersdirectory;
+use App\Models\DirectoriesBackup;
 use Illuminate\Http\Request;
 
-class TusersdirectoryController extends Controller
+class DirectoriesBackupController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,13 +29,12 @@ class TusersdirectoryController extends Controller
     public function store(Request $request)
     {
         //
-        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Tusersdirectory $tusersdirectory)
+    public function show(DirectoriesBackup $directoriesBackup)
     {
         //
     }
@@ -43,7 +42,7 @@ class TusersdirectoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tusersdirectory $tusersdirectory)
+    public function edit(DirectoriesBackup $directoriesBackup)
     {
         //
     }
@@ -51,7 +50,7 @@ class TusersdirectoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tusersdirectory $tusersdirectory)
+    public function update(Request $request, DirectoriesBackup $directoriesBackup)
     {
         //
     }
@@ -59,7 +58,7 @@ class TusersdirectoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tusersdirectory $tusersdirectory)
+    public function destroy(DirectoriesBackup $directoriesBackup)
     {
         //
     }

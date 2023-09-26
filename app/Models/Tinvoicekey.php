@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Tinvoicekey extends Model
 {
     use HasFactory;
-    const CREATED_AT = 'creation_date';
-    const UPDATED_AT = 'last_update';
+    // const CREATED_AT = 'creation_date';
+    // const UPDATED_AT = 'last_update';
 
     protected $primaryKey = "InvoicekeyId";
     protected $table = "TInvoiceKeys";

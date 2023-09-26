@@ -15,7 +15,12 @@ return new class extends Migration
             $table->id("UserId");
             $table->string('UserName');
             $table->string('UserPass');
+            $table->unsignedBigInteger('BranchFId');
+            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
+            $table->string('BranchScope')->nullable();
             $table->integer('Admin')->default(0);
+            $table->string("RememberToken")->nullable();
+            $table->string("APIToken")->nullable();
             $table->string('SerialNumber')->nullable();
             $table->string('SMSToken')->nullable();
             $table->string('SMSTokenExpiry')->nullable();
@@ -23,12 +28,6 @@ return new class extends Migration
             $table->string('WebAccess')->nullable();
             $table->string('DbUser')->nullable();
             $table->string('DbPass')->nullable();
-            $table->string('ClientName')->nullable();
-            $table->string('ClientPhoneNumber')->nullable();
-            $table->unsignedBigInteger('BranchFId');
-            $table->foreign('BranchFId')->references('BranchId')->on('TBranches');
-            $table->rememberToken();
-           
         });
     }
     /**

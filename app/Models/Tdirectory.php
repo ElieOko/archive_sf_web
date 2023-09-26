@@ -14,10 +14,16 @@ class Tdirectory extends Model
 
     protected $fillable = [
         'DirectoryName',
-        'parentId'
+        "ParentFId",
+        "Available",
+        "ForClient"
     ];
 
     public $timestamps = false;
+
+    protected $casts = [
+        'ForClient' => 'boolean',
+    ];
     
     public function tinvoice(): HasMany
     {

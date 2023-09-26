@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('TInvoices', function (Blueprint $table) {
+        Schema::create('TInvoicesHidden', function (Blueprint $table) {
             $table->id("InvoiceId");
             $table->string("InvoiceCode")->nullable();
             $table->string("InvoiceDesc")->nullable();
@@ -31,7 +31,8 @@ return new class extends Migration
             $table->string("ClientName")->nullable();
             $table->string("ClientPhone")->nullable();
             $table->date("ExpiredDate")->nullable();
-            $table->timestamps();
+            $table->datetime('CreatedAt')->nullable();
+            $table->datetime('UpdateAt')->nullable();
         });
     }
 
@@ -40,6 +41,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('TInvoices');
+        Schema::dropIfExists('TInvoicesHidden');
     }
 };

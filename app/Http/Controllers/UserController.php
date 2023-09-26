@@ -4,12 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Tinvoice;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     //
+    private $apiToken; 
+    public function __construct() 
+    { 
+        // Unique Token 
+        $this->apiToken = uniqid(base64_encode(Str::random(60))); 
+    }
     public function login(Request $request)
     {
         try {
@@ -25,10 +32,12 @@ class UserController extends Controller
                     ],200
                 );
             }
-            $token = $user->createToken('myapptoken')->plainTextToken;
+            $postArray = ['APIToken' => $this->apiToken]; 
+            $login = User::where('UserName',$fields['UserName'])->update($postArray); 
+            //$token = $user->createToken('myapptoken')->plainTextToken;
             $response = [
                'user' => $user,
-               'token'=> $token
+               'token'=> $this->apiToken
             ];  
             return response($response,201);
         } catch (\Throwable $th) {
@@ -38,11 +47,14 @@ class UserController extends Controller
     }
     public function register(Request $request)
     {
-        $fields = $request->validate([
+        try { 
+            $fields = $request->validate([
             'UserName' => 'required|string|unique:TUsers,UserName',
             'UserPass'=>'required_with:password_confirmation|same:password_confirmation',
-            'BranchFId'=>'required|int',
+            'BranchFId'=>'required|integer',
             'Admin'=>'integer',
+            'BranchScope'=>'required|integer',
+            'WebAccess'=>'required|integer'
         ]);
         $user = User::create([
             'UserName' => $fields['UserName'],
@@ -50,13 +62,21 @@ class UserController extends Controller
             'BranchFId' => $fields['BranchFId'],
             'Admin'=>$fields['Admin'],
             "DbUser"=>$fields['UserName'],
-            "DbPass"=>$fields['UserPass']
+            "DbPass"=>$fields['UserPass'],
+            "APIToken"=> $this->apiToken,
+            "BranchScope"=>$fields['BranchScope'],
+            "WebAccess"=>$fields['WebAccess']
         ]);
-        $token = $user->createToken('myapptoken')->plainTextToken;
         $response = [
             'user' => $user,
-            'token' => $token
+            'token' => $this->apiToken
         ];  
+             return response($response,201);
+        } catch (\Throwable $th) {
+            $response = ['message' => $th->getMessage()]; 
+            return $response;
+        }
+       
         return response($response,201);
     }
     public function filter(Request $request)
@@ -71,8 +91,6 @@ class UserController extends Controller
         }
         return response($response,201);
     }
-
-
     public function getAllUser()
     {
         $user = User::all();
